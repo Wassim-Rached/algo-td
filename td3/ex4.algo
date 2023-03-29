@@ -1,0 +1,53 @@
+types:
+	type Cellule = enregistrement
+		Info : entier
+		suivant : Liste
+	fin_enregistrement
+
+	type Liste = ^Cellule
+
+
+procédure COMPRESSER(L : Liste,var Lcomp)
+variables:
+	 Lcomp : Liste
+	current_bit,Cpt : entier
+début
+	// initialize the Lcomp List and add the first bit 
+	// which is the bit that represents the first bit nature (0 or 1)
+	Initialiser(Lcomp)
+	InsérerDébut(Lcomp,L^.Info)
+	// initialize our variables
+	current_bit <-- L^.Info
+	Cpt <-- 1
+	L <-- L^.suivant
+	répéter
+		si (L^.Info = current_bit) alors
+			Cpt = Cpt + 1
+		sinon
+			current_bit <-- L^.Info
+			InsérerFin(Lcomp,Cpt)
+			Cpt <-- 1
+		fin_si
+		L <-- L^.suivant
+	jusqu'à  (L = Nil)
+	InsérerFin(Lcomp,Cpt)
+fin
+
+procédure DECOMPRESSER(var L : Liste,Lcomp: Liste)
+variables
+	P : Liste
+	starter_bit : entier
+début
+	P <-- L
+	starter_bit <-- Lcomp^.Info
+	Lcomp <-- Lcomp^.suivant
+	
+	tant que Lcomp <> Nil faire
+		pour i de 1 à Lcomp^.Info faire
+			InsérerFin(L,starter_bit)
+		fin_pour
+		starter_bit <-- abs(starter_bit - 1)
+
+		Lcomp <-- Lcomp^.suivant
+	fin_tant_que
+fin

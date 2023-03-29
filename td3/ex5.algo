@@ -1,0 +1,43 @@
+Types:
+	type Cellule = enregistrement
+		mot : chaîne
+		suivant : ^Cellule 
+fin_enregistrement
+
+ type CelluleLettre = enregistrement
+ 	Lsuiv : ^CelluleLettre
+	Lettre : caractère 
+	Lmots : ^Cellule
+fin_enregistrement
+
+procédure CréerIndex(var cellule_L : CelluleLettre)
+variables:
+	P : CelluleLettre
+début
+	P <-- cellule_L
+	Initialiser(cellule_L)
+	pour i de 'A' à 'Z' faire
+		InsérerFin(cellule_L,i)
+	fin_pour
+fin
+
+fonction RechercheMot(cellule_L : CelluleLettre, mot : chaine) : booléen
+variables:
+	P : CelluleLettre
+début
+	P <-- cellule_L
+	tant que (P^.Lettre <> mot[1] et P <> Nil) faire
+		P <-- P^.suivant
+	fin_tant_que
+	si P = Nil alors
+		RechercheMot <-- faux 
+	sinon
+		tant que P^.Lmots <> Nil faire
+			si (P^.Lmots)^mot = mot alors
+				RechercheMot <-- vrai 
+			fin_si
+			P^.Lmots <-- (P^.Lmots)^.suivant
+		fin_tant_que
+		RechercheMot <-- faux
+	fin_si
+fin
